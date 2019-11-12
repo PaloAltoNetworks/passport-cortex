@@ -1,0 +1,44 @@
+{
+  "name": "passport-cortex",
+  "version": "0.1.0",
+  "description": "PassportJS authentication for Palo Alto Networks Cortex",
+  "author": "Brian Torres-Gil <btorres-gil@paloaltonetworks.com> (https://github.com/btorresgil)",
+  "main": "lib/passport-cortex.cjs.js",
+  "module": "lib/passport-cortex.esm.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "license": "ISC",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PaloAltoNetworks/passport-cortex.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PaloAltoNetworks/passport-cortex/issues"
+  },
+  "homepage": "https://github.com/PaloAltoNetworks/passport-cortex",
+  "keywords": [
+    "palo-alto-networks",
+    "cortex",
+    "passport",
+    "passportjs"
+  ],
+  "dependencies": {
+    "@types/passport": "^1.0.1",
+    "@types/passport-oauth2": "^1.4.8",
+    "passport": "^0.4.0",
+    "passport-oauth2": "^1.5.0"
+  },
+  "devDependencies": {
+    "rollup": "^1.26.3",
+    "rollup-plugin-typescript2": "^0.25.2",
+    "typescript": "^3.7.2"
+  }
+}
