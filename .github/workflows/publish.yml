@@ -1,9 +1,11 @@
 name: Publish
 
-on: [release]
+on:
+  release:
+    types: [created]
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -12,12 +14,55 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: 12
+      - run: npm install
+      - run: npm run build
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node_modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
           registry-url: https://registry.npmjs.org
       - run: npm install
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node_modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com/
+          scope: '@PaloAltoNetworks'
+      - run: npm install
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
